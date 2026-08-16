@@ -1,15 +1,11 @@
 # AI Coding Assistant Data Extraction Toolkit
 
 Extract your **own local chat history** from AI coding assistants into a single,
-normalized JSONL format — for fine-tuning, personal analytics, or just backing
+normalized JSONL format - for fine-tuning, personal analytics, or just backing
 up years of conversations before an app's local database gets cleared.
 
-Inspired by [0xSero/ai-data-extraction](https://github.com/0xSero/ai-data-extraction).
-This version covers the same 8 tools plus **Cline/Roo Code** and **Aider**
-(see [Why these two](#why-cline-and-aider), below), and adds an interactive
-CLI so you don't have to run scripts one by one.
 
-## What this does
+## Features
 
 Auto-discovers and extracts complete conversation history, including:
 
@@ -17,7 +13,7 @@ Auto-discovers and extracts complete conversation history, including:
 - Code context (file paths, selections, snippets)
 - Code diffs / suggested edits, where the tool records them
 - Tool calls and their results
-- Timestamps, session IDs, project paths, model names — whatever each
+- Timestamps, session IDs, project paths, model names - whatever each
   tool's storage actually contains
 
 ## Supported sources
@@ -37,7 +33,7 @@ Auto-discovers and extracts complete conversation history, including:
 
 Every script searches macOS, Linux, and Windows conventions
 (`~/Library/Application Support`, `~/.config`, `~/.local/share`, `%APPDATA%`,
-`%LOCALAPPDATA%`) automatically — you don't need to tell it which OS you're on.
+`%LOCALAPPDATA%`) automatically - you don't need to tell it which OS you're on.
 
 ### Why Cline and Aider
 
@@ -140,7 +136,7 @@ Each line is one JSON conversation:
 ```
 
 Fields vary a bit by source (not every tool records `code_context`, token
-usage, or `project_path`) — `messages`, `source`, and `session_id` are the
+usage, or `project_path`) - `messages`, `source`, and `session_id` are the
 only ones you can always rely on.
 
 ## How it works
@@ -148,14 +144,14 @@ only ones you can always rely on.
 1. **Detect the OS** and build a list of plausible data roots
    (`Application Support`, `.config`, `.local/share`, `%APPDATA%`, etc).
 2. **Search each root** for the tool's known folder name(s).
-3. **Read the storage** — JSONL line-by-line, SQLite via a read-only
+3. **Read the storage** - JSONL line-by-line, SQLite via a read-only
    connection (so a running app never blocks us), or JSON trees, depending
    on the tool.
 4. **Normalize** whatever's found into the `messages[]` schema above.
 5. **Write JSONL**, one conversation per line, into `extracted_data/`.
 
 Nothing here ever opens a database for writing, and every reader is wrapped
-so that one corrupt or locked file can't take down the whole run — you'll
+so that one corrupt or locked file can't take down the whole run - you'll
 get a partial result and move on, not a stack trace.
 
 ### A note on Cursor, Windsurf, and Trae
@@ -167,13 +163,13 @@ times (Cursor alone has gone through at least three shapes: workspace
 `windsurf.py` and `trae.py` instead use a **generic heuristic**
 (`extractors/common.py::heuristic_extract_chat_from_kv`) that scans
 chat-related keys and walks the parsed JSON looking for objects shaped like
-a role + text pair. It's honest best-effort, not a documented format — if
+a role + text pair. It's honest best-effort, not a documented format - if
 a future version changes shape and stops matching, that's expected; adjust
 `KEY_HINTS` in the relevant file or send a PR.
 
 ### A note on Aider
 
-Aider has no central session store — every project directory gets its own
+Aider has no central session store - every project directory gets its own
 `.aider.chat.history.md`. By default this toolkit scans your home directory
 plus a handful of common project-root names (`projects`, `code`, `dev`,
 `repos`, `workspace`, `src`, `Documents`) up to 5 directories deep, skipping
@@ -186,7 +182,7 @@ python3 extract.py --sources aider --search-path ~/client-work --search-path /mn
 
 ## Extending it: adding a new source
 
-Every extractor is a small module with the same two-function interface —
+Every extractor is a small module with the same two-function interface -
 copy the simplest one (`continue_ext.py` is a good template) and fill in:
 
 ```python
@@ -214,7 +210,7 @@ sharing or training on it:
    pip install detect-secrets --break-system-packages
    detect-secrets scan extracted_data/*.jsonl
    ```
-2. **Review for proprietary code, API keys, and personal file paths** —
+2. **Review for proprietary code, API keys, and personal file paths** -
    `code_context` and `tool_use` fields are the most likely places to find them.
 3. **Don't commit `extracted_data/` to a public repo** (it's already in
    `.gitignore`). Keep it on encrypted storage if it contains client or
@@ -236,16 +232,16 @@ dataset = dataset.map(format_chat)
 
 ## Troubleshooting
 
-**"No installation found"** — the tool either isn't installed, has no chat
+**"No installation found"** - the tool either isn't installed, has no chat
 history yet, or lives somewhere nonstandard. Pass `--search-path` to point
 at it directly, or check `extractors/<tool>.py`'s `SEARCH_DIRS` /
 `APP_DIR_NAMES` constant and add your path there.
 
-**Cursor/Windsurf database locked** — reads are opened `mode=ro` specifically
+**Cursor/Windsurf database locked** - reads are opened `mode=ro` specifically
 so a running editor won't block extraction, but if you still see errors,
 close the app and re-run.
 
-**Windsurf/Trae found an installation but 0 conversations** — the heuristic
+**Windsurf/Trae found an installation but 0 conversations** - the heuristic
 key-matching in `common.heuristic_extract_chat_from_kv` didn't recognize the
 current storage keys. Run `--list` to confirm the app dir was found, then
 inspect `state.vscdb`'s `ItemTable`/`cursorDiskKV` keys directly
@@ -264,4 +260,4 @@ machine. You're responsible for:
 
 ## License
 
-MIT — use freely, including for training ML models.
+MIT - use freely, including for training ML models.
