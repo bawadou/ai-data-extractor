@@ -4,6 +4,7 @@ import argparse
 import sys
 from pathlib import Path
 
+from extractors import extract
 from extractors import common
 from extractors import (
     claude_code, codex, cursor, windsurf, trae,
@@ -16,6 +17,8 @@ REGISTRY = [
 ]
 BY_ID = {m.SOURCE_ID: m for m in REGISTRY}
 
+
+extract.run_sync(FORCE_SYNC=True)
 
 def interactive_select() -> list[str]:
     common.heading("Select data sources to extract")
