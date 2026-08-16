@@ -1,18 +1,3 @@
-#!/usr/bin/env python3
-"""
-extract.py -- interactive CLI for the AI Coding Assistant Data Extraction Toolkit.
-
-Run with no arguments for an interactive picker, or drive it non-interactively:
-
-    python3 extract.py --all
-    python3 extract.py --sources cursor,claude_code
-    python3 extract.py --list
-    python3 extract.py --sources aider --search-path ~/client-work --search-path ~/oss
-    python3 extract.py --all --merge
-
-See README.md for what each extractor looks for and the output schema.
-"""
-
 from __future__ import annotations
 
 import argparse
