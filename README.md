@@ -1,4 +1,4 @@
-# AI Coding Assistant Data Extraction Toolkit
+# AI Coding Assistant Data Extraction
 
 Extract your **own local chat history** from AI coding assistants into a single,
 normalized JSONL format - for fine-tuning, personal analytics, or just backing
@@ -54,16 +54,16 @@ and both have a genuinely different (and instructive) storage shape:
 
 ```bash
 # No dependencies -- standard library only
-python3 --version   # 3.9+ required, 3.10+ recommended
+python --version   # 3.9+ required, 3.10+ recommended
 
 # Interactive: pick which sources to extract from a numbered menu
-python3 extract.py
+python extract.py
 
 # Or drive it directly
-python3 extract.py --all
-python3 extract.py --sources cursor,claude_code,aider
-python3 extract.py --list                    # just show what's installed, don't extract
-python3 extract.py --all --merge             # also write all_conversations.jsonl
+python extract.py --all
+python extract.py --sources cursor,claude_code,aider
+python extract.py --list                    # just show what's installed, don't extract
+python extract.py --all --merge             # also write all_conversations.jsonl
 
 # Shorthand for "extract everything"
 ./extract_all.sh
@@ -72,7 +72,7 @@ python3 extract.py --all --merge             # also write all_conversations.json
 ### CLI reference
 
 ```
-python3 extract.py [--all] [--sources ids] [--list] [--output-dir DIR]
+python extract.py [--all] [--sources ids] [--list] [--output-dir DIR]
                     [--search-path PATH ...] [--merge]
 
 --all                 Extract every supported source, no prompts.
@@ -91,8 +91,8 @@ python3 extract.py [--all] [--sources ids] [--list] [--output-dir DIR]
 ```
 
 Each extractor can also still be run standalone, same as the original
-toolkit (`python3 -m extractors.cursor` from the project root, or
-`python3 extractors/cursor.py`), which is handy while debugging one source.
+toolkit (`python -m extractors.cursor` from the project root, or
+`python extractors/cursor.py`), which is handy while debugging one source.
 
 ## Output format
 
@@ -177,7 +177,7 @@ plus a handful of common project-root names (`projects`, `code`, `dev`,
 point at them directly:
 
 ```bash
-python3 extract.py --sources aider --search-path ~/client-work --search-path /mnt/data/repos
+python extract.py --sources aider --search-path ~/client-work --search-path /mnt/data/repos
 ```
 
 ## Extending it: adding a new source
