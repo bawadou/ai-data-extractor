@@ -18,7 +18,7 @@ REGISTRY = [
 BY_ID = {m.SOURCE_ID: m for m in REGISTRY}
 
 
-extract.run_sync(FORCE_SYNC=True)
+extract.run_sync()
 
 def interactive_select() -> list[str]:
     common.heading("Select data sources to extract")
